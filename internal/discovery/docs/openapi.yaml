@@ -1,0 +1,583 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: basyx-dev@eclipse.org
+    name: The BaSyx Developers
+    url: https://www.eclipse.org/basyx/
+  description: "The entire Full Profile of the Discovery Service Specification as\
+    \ part of the [Specification of the Asset Administration Shell: Part 2](http://industrialdigitaltwin.org/en/content-hub).\
+    \  \nPublisher: Industrial Digital Twin Association (IDTA) April 2023"
+  license:
+    name: MIT License
+    url: https://opensource.org/license/mit
+  title: DotAAS Part 2 | HTTP/REST | Discovery Service Specification
+  version: V3.0.3_SSP-001
+  x-profile-identifier: https://admin-shell.io/aas/API/3/0/DiscoveryServiceSpecification/SSP-001
+paths:
+  /lookup/shells:
+    get:
+      operationId: GetAllAssetAdministrationShellIdsByAssetLink
+      parameters:
+      - description: "A list of specific Asset identifiers. Every single value asset\
+          \ identifier is a base64-url-encoded [SpecificAssetId](https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.0.3#/components/schemas/SpecificAssetId)."
+        explode: true
+        in: query
+        name: assetIds
+        required: false
+        schema:
+          example: ?assetIds=eyAibmFtZSI6ICJzb21lLWFzc2V0LWlkIiwgInZhbHVlIjogImh0dHA6Ly9leGFtcGxlLWNvbXBhbnkuY29tL215QXNzZXQiLCAiZXh0ZXJuYWxTdWJqZWN0SWQiOiB7ICJrZXlzIjogWyB7ICJ0eXBlIjogIkdsb2JhbFJlZmVyZW5jZSIsICJ2YWx1ZSI6ICJodHRwOi8vZXhhbXBsZS1jb21wYW55LmNvbS9leGFtcGxlLWNvbXBhbnlzLWFzc2V0LWtleXMiIH0gXSwgInR5cGUiOiAiRXh0ZXJuYWxSZWZlcmVuY2UiIH0gfQ&assetIds=eyAibmFtZSI6ICJzb21lLW90aGVyLWFzc2V0LWlkIiwgInZhbHVlIjogIjEyMzQ1QUJDIiwgImV4dGVybmFsU3ViamVjdElkIjogeyAia2V5cyI6IFsgeyAidHlwZSI6ICJHbG9iYWxSZWZlcmVuY2UiLCAidmFsdWUiOiAiaHR0cDovL215LW93bi1jb21wYW55LmNvbS9rZXlzIiB9IF0sICJ0eXBlIjogIkV4dGVybmFsUmVmZXJlbmNlIiB9IH0
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The maximum number of elements in the response array
+        in: query
+        name: limit
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - description: A server-generated identifier retrieved from pagingMetadata that
+          specifies from which position the result listing should continue
+        in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllAssetAdministrationShellIdsByAssetLink_200_response'
+          description: Requested Asset Administration Shell ids
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: Default error handling for unmentioned status codes
+      summary: Returns a list of Asset Administration Shell ids linked to specific
+        Asset identifiers
+      tags:
+      - Asset Administration Shell Basic Discovery API
+      x-semanticIds:
+      - https://admin-shell.io/aas/API/GetAllAssetAdministrationShellIdsByAssetLink/3/0
+  /lookup/shells/{aasIdentifier}:
+    delete:
+      operationId: DeleteAllAssetLinksById
+      parameters:
+      - description: The Asset Administration Shell’s unique id (UTF8-BASE64-URL-encoded)
+        explode: false
+        in: path
+        name: aasIdentifier
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Specific Asset identifiers deleted successfully
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: Default error handling for unmentioned status codes
+      summary: Deletes all specific Asset identifiers linked to an Asset Administration
+        Shell to edit discoverable content
+      tags:
+      - Asset Administration Shell Basic Discovery API
+      x-semanticIds:
+      - https://admin-shell.io/aas/API/DeleteAllAssetLinksById/3/0
+    get:
+      operationId: GetAllAssetLinksById
+      parameters:
+      - description: The Asset Administration Shell’s unique id (UTF8-BASE64-URL-encoded)
+        explode: false
+        in: path
+        name: aasIdentifier
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SpecificAssetId'
+                type: array
+          description: Requested specific Asset identifiers
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: Default error handling for unmentioned status codes
+      summary: Returns a list of specific Asset identifiers based on an Asset Administration
+        Shell id to edit discoverable content
+      tags:
+      - Asset Administration Shell Basic Discovery API
+      x-semanticIds:
+      - https://admin-shell.io/aas/API/GetAllAssetLinksById/3/0
+    post:
+      operationId: PostAllAssetLinksById
+      parameters:
+      - description: The Asset Administration Shell’s unique id (UTF8-BASE64-URL-encoded)
+        explode: false
+        in: path
+        name: aasIdentifier
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/SpecificAssetId'
+              type: array
+        description: A list of specific Asset identifiers
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SpecificAssetId'
+                type: array
+          description: Specific Asset identifiers created successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: "Bad Request, e.g. the request parameters of the format of\
+            \ the request body is wrong."
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: "Conflict, a resource which shall be created exists already.\
+            \ Might be thrown if a Submodel or SubmodelElement with the same ShortId\
+            \ is contained in a POST request."
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: Default error handling for unmentioned status codes
+      summary: Creates specific Asset identifiers linked to an Asset Administration
+        Shell to edit discoverable content
+      tags:
+      - Asset Administration Shell Basic Discovery API
+      x-semanticIds:
+      - https://admin-shell.io/aas/API/PostAllAssetLinksById/3/0
+  /description:
+    get:
+      operationId: GetDescription
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceDescription'
+          description: Requested Description
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: Default error handling for unmentioned status codes
+      summary: Returns the self-describing information of a network resource (ServiceDescription)
+      tags:
+      - Description API
+      x-semanticIds:
+      - https://admin-shell.io/aas/API/Descriptor/GetDescription/3/0
+components:
+  parameters:
+    AssetIds:
+      description: "A list of specific Asset identifiers. Every single value asset\
+        \ identifier is a base64-url-encoded [SpecificAssetId](https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.0.3#/components/schemas/SpecificAssetId)."
+      explode: true
+      in: query
+      name: assetIds
+      required: false
+      schema:
+        example: ?assetIds=eyAibmFtZSI6ICJzb21lLWFzc2V0LWlkIiwgInZhbHVlIjogImh0dHA6Ly9leGFtcGxlLWNvbXBhbnkuY29tL215QXNzZXQiLCAiZXh0ZXJuYWxTdWJqZWN0SWQiOiB7ICJrZXlzIjogWyB7ICJ0eXBlIjogIkdsb2JhbFJlZmVyZW5jZSIsICJ2YWx1ZSI6ICJodHRwOi8vZXhhbXBsZS1jb21wYW55LmNvbS9leGFtcGxlLWNvbXBhbnlzLWFzc2V0LWtleXMiIH0gXSwgInR5cGUiOiAiRXh0ZXJuYWxSZWZlcmVuY2UiIH0gfQ&assetIds=eyAibmFtZSI6ICJzb21lLW90aGVyLWFzc2V0LWlkIiwgInZhbHVlIjogIjEyMzQ1QUJDIiwgImV4dGVybmFsU3ViamVjdElkIjogeyAia2V5cyI6IFsgeyAidHlwZSI6ICJHbG9iYWxSZWZlcmVuY2UiLCAidmFsdWUiOiAiaHR0cDovL215LW93bi1jb21wYW55LmNvbS9rZXlzIiB9IF0sICJ0eXBlIjogIkV4dGVybmFsUmVmZXJlbmNlIiB9IH0
+        items:
+          type: string
+        type: array
+      style: form
+    Limit:
+      description: The maximum number of elements in the response array
+      in: query
+      name: limit
+      required: false
+      schema:
+        minimum: 1
+        type: integer
+    Cursor:
+      description: A server-generated identifier retrieved from pagingMetadata that
+        specifies from which position the result listing should continue
+      in: query
+      name: cursor
+      required: false
+      schema:
+        type: string
+    AssetAdministrationShellIdentifier:
+      description: The Asset Administration Shell’s unique id (UTF8-BASE64-URL-encoded)
+      explode: false
+      in: path
+      name: aasIdentifier
+      required: true
+      schema:
+        type: string
+      style: simple
+  responses:
+    default:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Result'
+      description: Default error handling for unmentioned status codes
+    not-found:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Result'
+      description: Not Found
+    bad-request:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Result'
+      description: "Bad Request, e.g. the request parameters of the format of the\
+        \ request body is wrong."
+    conflict:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Result'
+      description: "Conflict, a resource which shall be created exists already. Might\
+        \ be thrown if a Submodel or SubmodelElement with the same ShortId is contained\
+        \ in a POST request."
+  schemas:
+    PagedResult:
+      properties:
+        paging_metadata:
+          $ref: '#/components/schemas/PagedResult_paging_metadata'
+      type: object
+    Result:
+      example:
+        messages:
+        - code: code
+          messageType: Undefined
+          correlationId: correlationId
+          text: text
+          timestamp: timestamp
+        - code: code
+          messageType: Undefined
+          correlationId: correlationId
+          text: text
+          timestamp: timestamp
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/Message'
+          type: array
+      type: object
+    Message:
+      example:
+        code: code
+        messageType: Undefined
+        correlationId: correlationId
+        text: text
+        timestamp: timestamp
+      properties:
+        code:
+          maxLength: 32
+          minLength: 1
+          type: string
+        correlationId:
+          maxLength: 128
+          minLength: 1
+          type: string
+        messageType:
+          enum:
+          - Undefined
+          - Info
+          - Warning
+          - Error
+          - Exception
+          type: string
+        text:
+          type: string
+        timestamp:
+          pattern: "^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\\
+            .[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$"
+          type: string
+      type: object
+    SpecificAssetId:
+      allOf:
+      - $ref: '#/components/schemas/HasSemantics'
+      - properties:
+          name:
+            maxLength: 64
+            minLength: 1
+            pattern: "^([\\x09\\x0a\\x0d\\x20-\\ud7ff\\ue000-\\ufffd]|\\ud800[\\udc00-\\\
+              udfff]|[\\ud801-\\udbfe][\\udc00-\\udfff]|\\udbff[\\udc00-\\udfff])*$"
+            type: string
+          value:
+            maxLength: 2000
+            minLength: 1
+            pattern: "^([\\x09\\x0a\\x0d\\x20-\\ud7ff\\ue000-\\ufffd]|\\ud800[\\udc00-\\\
+              udfff]|[\\ud801-\\udbfe][\\udc00-\\udfff]|\\udbff[\\udc00-\\udfff])*$"
+            type: string
+          externalSubjectId:
+            $ref: '#/components/schemas/Reference'
+        required:
+        - name
+        - value
+      example:
+        semanticId:
+          keys:
+          - type: AnnotatedRelationshipElement
+            value: value
+          - type: AnnotatedRelationshipElement
+            value: value
+          referredSemanticId:
+            keys:
+            - type: AnnotatedRelationshipElement
+              value: value
+            - type: AnnotatedRelationshipElement
+              value: value
+            type: null
+          type: ExternalReference
+        externalSubjectId:
+          keys:
+          - type: AnnotatedRelationshipElement
+            value: value
+          - type: AnnotatedRelationshipElement
+            value: value
+          referredSemanticId:
+            keys:
+            - type: AnnotatedRelationshipElement
+              value: value
+            - type: AnnotatedRelationshipElement
+              value: value
+            type: null
+          type: ExternalReference
+        name: name
+        supplementalSemanticIds:
+        - keys:
+          - type: AnnotatedRelationshipElement
+            value: value
+          - type: AnnotatedRelationshipElement
+            value: value
+          referredSemanticId:
+            keys:
+            - type: AnnotatedRelationshipElement
+              value: value
+            - type: AnnotatedRelationshipElement
+              value: value
+            type: null
+          type: ExternalReference
+        - keys:
+          - type: AnnotatedRelationshipElement
+            value: value
+          - type: AnnotatedRelationshipElement
+            value: value
+          referredSemanticId:
+            keys:
+            - type: AnnotatedRelationshipElement
+              value: value
+            - type: AnnotatedRelationshipElement
+              value: value
+            type: null
+          type: ExternalReference
+        value: value
+    HasSemantics:
+      properties:
+        semanticId:
+          $ref: '#/components/schemas/Reference'
+        supplementalSemanticIds:
+          items:
+            $ref: '#/components/schemas/Reference'
+          minItems: 1
+          type: array
+      type: object
+    Reference:
+      allOf:
+      - $ref: '#/components/schemas/ReferenceParent'
+      - properties:
+          referredSemanticId:
+            $ref: '#/components/schemas/ReferenceParent'
+      example:
+        keys:
+        - type: AnnotatedRelationshipElement
+          value: value
+        - type: AnnotatedRelationshipElement
+          value: value
+        referredSemanticId:
+          keys:
+          - type: AnnotatedRelationshipElement
+            value: value
+          - type: AnnotatedRelationshipElement
+            value: value
+          type: null
+        type: ExternalReference
+    ReferenceParent:
+      example:
+        keys:
+        - type: AnnotatedRelationshipElement
+          value: value
+        - type: AnnotatedRelationshipElement
+          value: value
+        type: null
+      properties:
+        type:
+          $ref: '#/components/schemas/ReferenceTypes'
+        keys:
+          items:
+            $ref: '#/components/schemas/Key'
+          minItems: 1
+          type: array
+      required:
+      - keys
+      - type
+      type: object
+    ReferenceTypes:
+      enum:
+      - ExternalReference
+      - ModelReference
+      type: string
+    Key:
+      example:
+        type: AnnotatedRelationshipElement
+        value: value
+      properties:
+        type:
+          $ref: '#/components/schemas/KeyTypes'
+        value:
+          maxLength: 2000
+          minLength: 1
+          pattern: "^([\\x09\\x0a\\x0d\\x20-\\ud7ff\\ue000-\\ufffd]|\\ud800[\\udc00-\\\
+            udfff]|[\\ud801-\\udbfe][\\udc00-\\udfff]|\\udbff[\\udc00-\\udfff])*$"
+          type: string
+      required:
+      - type
+      - value
+      type: object
+    KeyTypes:
+      enum:
+      - AnnotatedRelationshipElement
+      - AssetAdministrationShell
+      - BasicEventElement
+      - Blob
+      - Capability
+      - ConceptDescription
+      - DataElement
+      - Entity
+      - EventElement
+      - File
+      - FragmentReference
+      - GlobalReference
+      - Identifiable
+      - MultiLanguageProperty
+      - Operation
+      - Property
+      - Range
+      - Referable
+      - ReferenceElement
+      - RelationshipElement
+      - Submodel
+      - SubmodelElement
+      - SubmodelElementCollection
+      - SubmodelElementList
+      type: string
+    ServiceDescription:
+      description: "The Description object enables servers to present their capabilities\
+        \ to the clients, in particular which profiles they implement. At least one\
+        \ defined profile is required. Additional, proprietary attributes might be\
+        \ included. Nevertheless, the server must not expect that a regular client\
+        \ understands them."
+      example: |-
+        {
+          "profiles": [
+            "https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRegistryServiceSpecification/SSP-002",
+            "https://admin-shell.io/aas/API/3/0/SubmodelRegistryServiceSpecification/SSP-002"
+          ]
+        }
+      properties:
+        profiles:
+          items:
+            example: "[\"https://admin-shell.io/aas/API/3/0/AssetAdministrationShellServiceSpecification/SSP-001\"\
+              ,\"https://admin-shell.io/aas/API/3/0/AssetAdministrationShellServiceSpecification/SSP-002\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelServiceSpecification/SSP-001\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelServiceSpecification/SSP-002\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelServiceSpecification/SSP-003\"\
+              ,\"https://admin-shell.io/aas/API/3/0/AasxFileServerServiceSpecification/SSP-001\"\
+              ,\"https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRegistryServiceSpecification/SSP-001\"\
+              ,\"https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRegistryServiceSpecification/SSP-002\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelRegistryServiceSpecification/SSP-001\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelRegistryServiceSpecification/SSP-002\"\
+              ,\"https://admin-shell.io/aas/API/3/0/DiscoveryServiceSpecification/SSP-001\"\
+              ,\"https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRepositoryServiceSpecification/SSP-001\"\
+              ,\"https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRepositoryServiceSpecification/SSP-002\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelRepositoryServiceSpecification/SSP-001\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelRepositoryServiceSpecification/SSP-002\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelRepositoryServiceSpecification/SSP-003\"\
+              ,\"https://admin-shell.io/aas/API/3/0/SubmodelRepositoryServiceSpecification/SSP-004\"\
+              ,\"https://admin-shell.io/aas/API/3/0/ConceptDescriptionServiceSpecification/SSP-001\"\
+              ]"
+            type: string
+          minItems: 1
+          type: array
+      type: object
+    GetAllAssetAdministrationShellIdsByAssetLink_200_response:
+      allOf:
+      - $ref: '#/components/schemas/PagedResult'
+      - properties:
+          result:
+            items:
+              type: string
+            type: array
+        type: object
+      example:
+        result:
+        - result
+        - result
+        paging_metadata:
+          cursor: wJlCDLIl6KTWypN7T6vc6nWEmEYe99Hjf1XY1xmqV-M=#
+    PagedResult_paging_metadata:
+      example:
+        cursor: wJlCDLIl6KTWypN7T6vc6nWEmEYe99Hjf1XY1xmqV-M=#
+      properties:
+        cursor:
+          example: wJlCDLIl6KTWypN7T6vc6nWEmEYe99Hjf1XY1xmqV-M=#
+          type: string
+      type: object
