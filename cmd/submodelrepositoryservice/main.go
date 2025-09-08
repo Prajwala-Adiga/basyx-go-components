@@ -66,6 +66,7 @@ func main() {
 		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte("inserted sm-99"))
 	})
+
 	// Start the server
 	addr := "0.0.0.0:5004"
 	log.Printf("▶️  Submodel Repository listening on %s\n", addr)
