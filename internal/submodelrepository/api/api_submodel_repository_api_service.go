@@ -53,7 +53,7 @@ func (s *SubmodelRepositoryAPIAPIService) GetAllSubmodels(
 	return gen.Response(200, sms), nil
 }
 
-// for get by id
+// for getSubModel by id
 func (s *SubmodelRepositoryAPIAPIService) GetSubmodelById(
 	ctx context.Context,
 	id string,
@@ -70,37 +70,28 @@ func (s *SubmodelRepositoryAPIAPIService) GetSubmodelById(
 	return gen.Response(200, sm), nil
 }
 
+// DeleteSubmodelById - Deletes a Submodel by Id
+func (s *SubmodelRepositoryAPIAPIService) DeleteSubmodelById(
+	ctx context.Context,
+	id string,
+) (gen.ImplResponse, error) {
+	err := s.submodelBackend.DeleteSubmodel(id)
+	if err != nil {
+		return gen.Response(500, nil), err
+	}
+	return gen.Response(204, nil), nil
+}
+
 // PostSubmodel - Creates a new Submodel
-func (s *SubmodelRepositoryAPIAPIService) PostSubmodel(ctx context.Context, submodel gen.Submodel) (gen.ImplResponse, error) {
-	// _, error := s.submodelBackend.CreateSubmodel(submodel)
-	// if( error != nil) {
-	// 	return gen.Response(409, nil), error
-	// }
-	return gen.Response(201, nil), nil
-	// TODO - update PostSubmodel with the required logic for this service method.
-	// Add api_submodel_repository_api_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	// TODO: Uncomment the next line to return response Response(201, Submodel{}) or use other options such as http.Ok ...
-	// return gen.Response(201, Submodel{}), nil
-
-	// TODO: Uncomment the next line to return response Response(400, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(400, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(401, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(401, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(403, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(403, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(409, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(409, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(500, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(500, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(0, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(0, Result{}), nil
-
+func (s *SubmodelRepositoryAPIAPIService) PostSubmodel(
+	ctx context.Context,
+	submodel gen.Submodel,
+) (gen.ImplResponse, error) {
+	_, err := s.submodelBackend.CreateSubmodel(submodel)
+	if err != nil {
+		return gen.Response(500, nil), err
+	}
+	return gen.Response(201, submodel), nil
 }
 
 // GetAllSubmodelsMetadata - Returns the metadata attributes of all Submodels
@@ -266,35 +257,6 @@ func (s *SubmodelRepositoryAPIAPIService) PutSubmodelById(ctx context.Context, s
 	// return gen.Response(0, Result{}), nil
 
 	return gen.Response(http.StatusNotImplemented, nil), errors.New("PutSubmodelById method not implemented")
-}
-
-// DeleteSubmodelById - Deletes a Submodel
-func (s *SubmodelRepositoryAPIAPIService) DeleteSubmodelById(ctx context.Context, submodelIdentifier string) (gen.ImplResponse, error) {
-	// TODO - update DeleteSubmodelById with the required logic for this service method.
-	// Add api_submodel_repository_api_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	// TODO: Uncomment the next line to return response Response(204, {}) or use other options such as http.Ok ...
-	// return gen.Response(204, nil),nil
-
-	// TODO: Uncomment the next line to return response Response(400, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(400, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(401, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(401, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(403, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(403, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(404, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(404, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(500, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(500, Result{}), nil
-
-	// TODO: Uncomment the next line to return response Response(0, Result{}) or use other options such as http.Ok ...
-	// return gen.Response(0, Result{}), nil
-
-	return gen.Response(http.StatusNotImplemented, nil), errors.New("DeleteSubmodelById method not implemented")
 }
 
 // PatchSubmodelById - Updates an existing Submodel

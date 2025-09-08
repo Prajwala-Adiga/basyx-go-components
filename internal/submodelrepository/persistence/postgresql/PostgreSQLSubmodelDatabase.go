@@ -27,25 +27,6 @@ func NewPostgreSQLSubmodelBackend(dsn string) (*PostgreSQLSubmodelDatabase, erro
 }
 
 // GetAllSubmodels holt alle Submodelle aus der DB
-// func (p *PostgreSQLSubmodelDatabase) GetAllSubmodels() ([]model.Submodel, error) {
-// 	rows, err := p.db.Query("SELECT * FROM submodels")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer rows.Close()
-
-// 	var submodels []model.Submodel
-// 	for rows.Next() {
-// 		var s model.Submodel
-// 		if err := rows.Scan(&s); err != nil {
-// 			return nil, err
-// 		}
-// 		submodels = append(submodels, s)
-// 	}
-// 	return submodels, nil
-// }
-
-// GetAllSubmodels holt alle Submodelle aus der DB
 func (p *PostgreSQLSubmodelDatabase) GetAllSubmodels() ([]gen.Submodel, error) {
 	rows, err := p.db.Query(`SELECT payload FROM submodels ORDER BY id LIMIT 100`)
 	if err != nil {
@@ -85,31 +66,21 @@ func (p *PostgreSQLSubmodelDatabase) GetSubmodel(id string) (gen.Submodel, error
 	return m, nil
 }
 
-// CreateSubmodel erstellt ein neues Submodel
-// func (p *PostgreSQLSubmodelDatabase) CreateSubmodel(submodel model.Submodel) (string, error) {
-// 	id := submodel.Id
-// 	if id == "" {
-// 		return "", fmt.Errorf("Id must not be empty")
-// 	}
-// 	_, err := p.db.Exec("INSERT INTO submodels (id) VALUES ($1, $2)", submodel.Id)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return id, nil
-// }
+// DeleteSubmodel deletes a Submodel by id
+func (p *PostgreSQLSubmodelDatabase) DeleteSubmodel(id string) error {
+	_, err := p.db.Exec(`DELETE FROM submodels WHERE id=$1`, id)
+	return err
+}
 
-// // DeleteSubmodel löscht ein Submodel
-// func (p *PostgreSQLSubmodelDatabase) DeleteSubmodel(id string) error {
-// 	result, err := p.db.Exec("DELETE FROM submodels WHERE id = $1", id)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	rowsAffected, err := result.RowsAffected()
-// 	if err != nil {
-// 		return err
-// 	}
-// 	if rowsAffected == 0 {
-// 		return fmt.Errorf("no submodel with id %s found", id)
-// 	}
-// 	return nil
-// }
+// CreateSubmodel inserts a new Submodel
+func (p *PostgreSQLSubmodelDatabase) CreateSubmodel(m gen.Submodel) (string, error) {
+	b, err := json.Marshal(m)
+	if err != nil {
+		return "", err
+	}
+	_, err = p.db.Exec(
+		`INSERT INTO submodels(id, payload) VALUES ($1, $2::jsonb) ON CONFLICT (id) DO UPDATE SET payload = EXCLUDED.payload`,
+		m.Id, string(b),
+	)
+	return m.Id, err
+}

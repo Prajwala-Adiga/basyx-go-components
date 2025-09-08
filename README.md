@@ -91,3 +91,48 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+## OpenAPI Server Stubs generation
+
+### AAS Discovery Service
+
+``` bash
+openapi-generator-cli generate \
+  -i api/discovery/openapi.yaml \
+  -g go-server \
+  -o pkg/discoveryapi \
+  --additional-properties=featureCORS=true,serverPort=5000,router=chi,outputAsLibrary=true
+```
+
+### Submodel Repository Service
+
+``` bash
+openapi-generator-cli generate \
+  -i api/submodelrepository/openapi.yaml \
+  -g go-server \
+  -o pkg/submodelrepositoryapi \
+  --additional-properties=featureCORS=true,serverPort=5000,router=chi,outputAsLibrary=true,enumClassPrefix=true
+```
+
+
+# BaSyx Go Componets
+
+## Goals
+
+- Implement the AAS API -> https://app.swaggerhub.com/search?owner=Plattform_i40
+  - [**Submodel Repo**](https://app.swaggerhub.com/apis/Plattform_i40/SubmodelRepositoryServiceSpecification/V3.1.1_SSP-001)
+  - [AAS Repo](https://app.swaggerhub.com/apis/Plattform_i40/AssetAdministrationShellRepositoryServiceSpecification/V3.1.1_SSP-001)
+  - [Concept Description Repo](https://app.swaggerhub.com/apis/Plattform_i40/ConceptDescriptionRepositoryServiceSpecification/V3.1.1_SSP-001)
+  - ... more to come
+- Postgres as a database with a scalable database schema -> https://github.com/eclipse-aaspe/server/tree/ChangesAndreas/examples/PerformanceSQL
+- The Database has to support the different types of SubmodelElements (SMEs) -> https://industrialdigitaltwin.io/aas-specifications/IDTA-01001/v3.1.1/spec-metamodel/submodel-elements.html
+- The API will be implemented in Go 1.24
+
+## Project structure (example: https://github.com/aas-hub-org/basyx-go-sdk)
+- `cmd/` contains the main application entry points.
+  - `cmd/submodelrepository/` contains the main application for the Submodel Repository.
+- `internal/` contains the internal packages that implement the business logic.
+  - `internal/common/` contains common utilities and helper functions. (e.g. base64URL encoding)
+  - `internal/submodelrepository/` contains the implementation of the Submodel Repository API.
+- `pkg/` contains the public packages that can be used by other applications.
+  - `pkg/submodelrepository/` Auto generated code from the OpenAPI specification for the Submodel Repository API.
